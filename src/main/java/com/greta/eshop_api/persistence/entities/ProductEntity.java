@@ -1,11 +1,8 @@
 package com.greta.eshop_api.persistence.entities;
 
 import jakarta.persistence.*;
-
-import java.util.List;
-
-
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Table(name = "product")
@@ -33,46 +30,28 @@ public class ProductEntity {
     @Column(nullable = false)
     private String imageUrl;
 
-    @Column(nullable = false)
-    private String category;
+    @ManyToOne
+    @JoinColumn(name = "category_id")
+    private CategoryEntity category;
 
     @Column(nullable = false)
-    private Boolean inStock;
+    private int stockQuantity;
 
     @Column(nullable = false)
     private double rating;
 
-    @Column(nullable = false)
-    private String watering;
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "care_info_id")
+    private CareInfoEntity careInfo;
 
-    @Column(nullable = false)
-    private String sunlight;
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "botanical_info_id")
+    private BotanicalInfoEntity botanicalInfo;
 
-    @Column(nullable = false)
-    private String fertilizer;
-
-    @Column(nullable = false)
-    private String soilType;
-
-    @ElementCollection /* table séparée */
-    @CollectionTable(name = "product_size_options", joinColumns = @JoinColumn(name = "product_id")) /* configuration table + colonne jointure */
+    @ElementCollection
+    @CollectionTable(name = "product_size_options", joinColumns = @JoinColumn(name = "product_id"))
     @Column(name = "size_option")
     private List<String> sizeOptions;
-
-    @Column(nullable = false)
-    private String family;
-
-    @Column(nullable = false)
-    private String origin;
-
-    @Column(nullable = false)
-    private String lifespan;
-
-    @Column(nullable = false)
-    private String toxicity;
-
-    @Column(nullable = false)
-    private String difficulty;
 
     @Column(nullable = false, columnDefinition = "TEXT")
     private String expertAdvice;
@@ -82,6 +61,18 @@ public class ProductEntity {
 
     @Column(nullable = false)
     private LocalDateTime updatedAt;
+
+    @OneToMany(mappedBy = "product")
+    private List<OrderItemEntity> orderItems;
+
+    @OneToMany(mappedBy = "product")
+    private List<CartItemEntity> cartItems;
+
+    @OneToMany(mappedBy = "product")
+    private List<FavoriteEntity> favorites;
+
+    @OneToMany(mappedBy = "product")
+    private List<ReviewEntity> reviews;
 
     @PrePersist
     public void onCreate() {
@@ -94,8 +85,7 @@ public class ProductEntity {
         updatedAt = LocalDateTime.now();
     }
 
-    public ProductEntity() {
-    }
+    public ProductEntity() {}
 
     public Long getId() {
         return id;
@@ -125,56 +115,28 @@ public class ProductEntity {
         return imageUrl;
     }
 
-    public String getCategory() {
+    public CategoryEntity getCategory() {
         return category;
     }
 
-    public Boolean getInStock() {
-        return inStock;
+    public int getStockQuantity() {
+        return stockQuantity;
     }
 
     public double getRating() {
         return rating;
     }
 
-    public String getWatering() {
-        return watering;
+    public CareInfoEntity getCareInfo() {
+        return careInfo;
     }
 
-    public String getSunlight() {
-        return sunlight;
-    }
-
-    public String getFertilizer() {
-        return fertilizer;
-    }
-
-    public String getSoilType() {
-        return soilType;
+    public BotanicalInfoEntity getBotanicalInfo() {
+        return botanicalInfo;
     }
 
     public List<String> getSizeOptions() {
         return sizeOptions;
-    }
-
-    public String getFamily() {
-        return family;
-    }
-
-    public String getOrigin() {
-        return origin;
-    }
-
-    public String getLifespan() {
-        return lifespan;
-    }
-
-    public String getToxicity() {
-        return toxicity;
-    }
-
-    public String getDifficulty() {
-        return difficulty;
     }
 
     public String getExpertAdvice() {
@@ -187,6 +149,22 @@ public class ProductEntity {
 
     public LocalDateTime getUpdatedAt() {
         return updatedAt;
+    }
+
+    public List<OrderItemEntity> getOrderItems() {
+        return orderItems;
+    }
+
+    public List<CartItemEntity> getCartItems() {
+        return cartItems;
+    }
+
+    public List<FavoriteEntity> getFavorites() {
+        return favorites;
+    }
+
+    public List<ReviewEntity> getReviews() {
+        return reviews;
     }
 
     public void setId(Long id) {
@@ -217,56 +195,28 @@ public class ProductEntity {
         this.imageUrl = imageUrl;
     }
 
-    public void setCategory(String category) {
+    public void setCategory(CategoryEntity category) {
         this.category = category;
     }
 
-    public void setInStock(Boolean inStock) {
-        this.inStock = inStock;
+    public void setStockQuantity(int stockQuantity) {
+        this.stockQuantity = stockQuantity;
     }
 
     public void setRating(double rating) {
         this.rating = rating;
     }
 
-    public void setWatering(String watering) {
-        this.watering = watering;
+    public void setCareInfo(CareInfoEntity careInfo) {
+        this.careInfo = careInfo;
     }
 
-    public void setSunlight(String sunlight) {
-        this.sunlight = sunlight;
-    }
-
-    public void setFertilizer(String fertilizer) {
-        this.fertilizer = fertilizer;
-    }
-
-    public void setSoilType(String soilType) {
-        this.soilType = soilType;
+    public void setBotanicalInfo(BotanicalInfoEntity botanicalInfo) {
+        this.botanicalInfo = botanicalInfo;
     }
 
     public void setSizeOptions(List<String> sizeOptions) {
         this.sizeOptions = sizeOptions;
-    }
-
-    public void setFamily(String family) {
-        this.family = family;
-    }
-
-    public void setOrigin(String origin) {
-        this.origin = origin;
-    }
-
-    public void setLifespan(String lifespan) {
-        this.lifespan = lifespan;
-    }
-
-    public void setToxicity(String toxicity) {
-        this.toxicity = toxicity;
-    }
-
-    public void setDifficulty(String difficulty) {
-        this.difficulty = difficulty;
     }
 
     public void setExpertAdvice(String expertAdvice) {
@@ -279,5 +229,21 @@ public class ProductEntity {
 
     public void setUpdatedAt(LocalDateTime updatedAt) {
         this.updatedAt = updatedAt;
+    }
+
+    public void setOrderItems(List<OrderItemEntity> orderItems) {
+        this.orderItems = orderItems;
+    }
+
+    public void setCartItems(List<CartItemEntity> cartItems) {
+        this.cartItems = cartItems;
+    }
+
+    public void setFavorites(List<FavoriteEntity> favorites) {
+        this.favorites = favorites;
+    }
+
+    public void setReviews(List<ReviewEntity> reviews) {
+        this.reviews = reviews;
     }
 }
