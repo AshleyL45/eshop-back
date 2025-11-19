@@ -12,24 +12,32 @@ public class OrderEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(nullable = false)
     private LocalDateTime orderDate;
 
-    @ManyToOne
-    @JoinColumn(name = "customer_id")
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "customer_id", nullable = false)
     private CustomerEntity customer;
 
-    @ManyToOne
-    @JoinColumn(name = "shipping_address_id")
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "shipping_address_id", nullable = false)
     private AddressEntity shippingAddress;
 
-    @ManyToOne
-    @JoinColumn(name = "billing_address_id")
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "billing_address_id", nullable = false)
     private AddressEntity billingAddress;
 
-    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
+    @OneToMany(
+            mappedBy = "order",
+            cascade = {CascadeType.PERSIST, CascadeType.MERGE},
+            orphanRemoval = false
+    )
     private List<OrderItemEntity> items;
 
-    @OneToOne(mappedBy = "order", cascade = CascadeType.ALL)
+    @OneToOne(
+            mappedBy = "order",
+            cascade = {CascadeType.PERSIST, CascadeType.MERGE}
+    )
     private PaymentEntity payment;
 
     public OrderEntity() {}
