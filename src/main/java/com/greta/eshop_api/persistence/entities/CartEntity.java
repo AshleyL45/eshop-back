@@ -11,11 +11,15 @@ public class CartEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToOne
-    @JoinColumn(name = "customer_id", unique = true)
+    @OneToOne(optional = false)
+    @JoinColumn(name = "customer_id", unique = true, nullable = false)
     private CustomerEntity customer;
 
-    @OneToMany(mappedBy = "cart", cascade = CascadeType.ALL)
+    @OneToMany(
+            mappedBy = "cart",
+            cascade = {CascadeType.PERSIST, CascadeType.MERGE},
+            orphanRemoval = false
+    )
     private List<CartItemEntity> items;
 
     public CartEntity() {}
