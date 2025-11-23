@@ -1,9 +1,12 @@
 package com.greta.eshop_api.exposition.controllers;
 
 import com.greta.eshop_api.exposition.dtos.ApiResponse;
-import com.greta.eshop_api.exposition.dtos.ProductDTO;
+import com.greta.eshop_api.exposition.dtos.Products.ProductRequestDTO;
+import com.greta.eshop_api.exposition.dtos.Products.ProductResponseDTO;
 import com.greta.eshop_api.exposition.mappers.ProductMapper;
+import com.greta.eshop_api.persistence.entities.CategoryEntity;
 import com.greta.eshop_api.persistence.entities.ProductEntity;
+import com.greta.eshop_api.persistence.repositories.CategoryRepository;
 import com.greta.eshop_api.persistence.repositories.ProductRepository;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -21,11 +24,16 @@ public class ProductController {
     @Autowired
     private ProductRepository productRepository;
 
+    @Autowired
+    private CategoryRepository categoryRepository;
+
+
     @GetMapping
     public ResponseEntity<ApiResponse> getAllProducts(HttpServletRequest request) {
-        List<ProductDTO> dtos = productRepository.findAll()
+
+        List<ProductResponseDTO> dtos = productRepository.findAll()
                 .stream()
-                .map(ProductMapper::toDTO)
+                .map(ProductMapper::toResponseDTO)
                 .toList();
 
         ApiResponse response = new ApiResponse(
@@ -38,7 +46,6 @@ public class ProductController {
         return ResponseEntity.ok(response);
     }
 
-
     @GetMapping("/{id}")
     public ResponseEntity<ApiResponse> getProductById(
             @PathVariable Long id,
@@ -50,7 +57,7 @@ public class ProductController {
                             200,
                             "Produit récupéré avec succès",
                             request.getRequestURI(),
-                            ProductMapper.toDTO(product)
+                            ProductMapper.toResponseDTO(product)
                     );
                     return ResponseEntity.ok(resp);
                 })
@@ -64,6 +71,7 @@ public class ProductController {
                     return ResponseEntity.status(404).body(resp);
                 });
     }
+
 
     @GetMapping("/search")
     public ResponseEntity<ApiResponse> searchProducts(
@@ -93,8 +101,8 @@ public class ProductController {
                     .toList();
         }
 
-        List<ProductDTO> dtos = products.stream()
-                .map(ProductMapper::toDTO)
+        List<ProductResponseDTO> dtos = products.stream()
+                .map(ProductMapper::toResponseDTO)
                 .toList();
 
         ApiResponse response = new ApiResponse(
@@ -109,16 +117,22 @@ public class ProductController {
 
     @PostMapping
     public ResponseEntity<ApiResponse> createProduct(
-            @RequestBody ProductEntity product,
-            HttpServletRequest request
+            @RequestBody ProductRequestDTO request,
+            HttpServletRequest httpRequest
     ) {
-        ProductEntity saved = productRepository.save(product);
+        CategoryEntity category = null;
+        if (request.categoryId() != null) {
+            category = categoryRepository.findById(request.categoryId()).orElse(null);
+        }
+
+        ProductEntity entity = ProductMapper.toEntity(request, category);
+        ProductEntity saved = productRepository.save(entity);
 
         ApiResponse response = new ApiResponse(
                 201,
                 "Produit créé avec succès",
-                request.getRequestURI(),
-                ProductMapper.toDTO(saved)
+                httpRequest.getRequestURI(),
+                ProductMapper.toResponseDTO(saved)
         );
 
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
@@ -127,36 +141,42 @@ public class ProductController {
     @PutMapping("/{id}")
     public ResponseEntity<ApiResponse> updateProduct(
             @PathVariable Long id,
-            @RequestBody ProductEntity newData,
-            HttpServletRequest request
+            @RequestBody ProductRequestDTO request,
+            HttpServletRequest httpRequest
     ) {
         ProductEntity existing = productRepository.findById(id).orElse(null);
 
         if (existing == null) {
-            ApiResponse resp = new ApiResponse(
-                    404,
-                    "Produit introuvable",
-                    request.getRequestURI(),
-                    null
+            return ResponseEntity.status(404).body(
+                    new ApiResponse(404, "Produit introuvable", httpRequest.getRequestURI(), null)
             );
-            return ResponseEntity.status(404).body(resp);
         }
 
-        existing.setName(newData.getName());
-        existing.setDescription(newData.getDescription());
-        existing.setImageUrl(newData.getImageUrl());
-        existing.setActive(newData.isActive());
-        existing.setPrice(newData.getPrice());
-        existing.setStockQuantity(newData.getStockQuantity());
-        existing.setDiscount(newData.getDiscount());
+        CategoryEntity category = null;
+        if (request.categoryId() != null) {
+            category = categoryRepository.findById(request.categoryId()).orElse(null);
+        }
+
+        existing.setName(request.name());
+        existing.setScientificName(request.scientificName());
+        existing.setDescription(request.description());
+        existing.setLongDescription(request.longDescription());
+        existing.setPrice(request.price());
+        existing.setImageUrl(request.imageUrl());
+        existing.setStockQuantity(request.stockQuantity());
+        existing.setRating(request.rating());
+        existing.setActive(request.active());
+        existing.setDiscount(request.discount());
+        existing.setExpertAdvice(request.expertAdvice());
+        existing.setCategory(category);
 
         ProductEntity updated = productRepository.save(existing);
 
         ApiResponse resp = new ApiResponse(
                 200,
                 "Produit mis à jour avec succès",
-                request.getRequestURI(),
-                ProductMapper.toDTO(updated)
+                httpRequest.getRequestURI(),
+                ProductMapper.toResponseDTO(updated)
         );
 
         return ResponseEntity.ok(resp);

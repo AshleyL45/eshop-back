@@ -1,33 +1,49 @@
 package com.greta.eshop_api.exposition.mappers;
 
-import com.greta.eshop_api.exposition.dtos.ProductDTO;
+import com.greta.eshop_api.exposition.dtos.Products.ProductRequestDTO;
+import com.greta.eshop_api.exposition.dtos.Products.ProductResponseDTO;
+import com.greta.eshop_api.persistence.entities.CategoryEntity;
 import com.greta.eshop_api.persistence.entities.ProductEntity;
 
 public class ProductMapper {
 
-    public static ProductDTO toDTO(ProductEntity entity) {
-        if (entity == null) return null;
+    public static ProductEntity toEntity(ProductRequestDTO dto, CategoryEntity category) {
 
-        ProductDTO dto = new ProductDTO();
+        ProductEntity entity = new ProductEntity();
 
-        dto.setId(entity.getId());
-        dto.setName(entity.getName());
-        dto.setScientificName(entity.getScientificName());
-        dto.setDescription(entity.getDescription());
-        dto.setLongDescription(entity.getLongDescription());
-        dto.setPrice(entity.getPrice());
-        dto.setImageUrl(entity.getImageUrl());
-        dto.setStockQuantity(entity.getStockQuantity());
-        dto.setRating(entity.getRating());
-        dto.setActive(entity.isActive());
-        dto.setDiscount(entity.getDiscount());
-        dto.setExpertAdvice(entity.getExpertAdvice());
+        entity.setName(dto.name());
+        entity.setScientificName(dto.scientificName());
+        entity.setDescription(dto.description());
+        entity.setLongDescription(dto.longDescription());
+        entity.setPrice(dto.price());
+        entity.setImageUrl(dto.imageUrl());
+        entity.setStockQuantity(dto.stockQuantity());
+        entity.setRating(dto.rating());
+        entity.setActive(dto.active());
+        entity.setDiscount(dto.discount());
+        entity.setExpertAdvice(dto.expertAdvice());
+        entity.setCategory(category);
 
-        if (entity.getCategory() != null) {
-            dto.setCategoryId(entity.getCategory().getId());
-            dto.setCategoryName(entity.getCategory().getName());
-        }
+        return entity;
+    }
 
-        return dto;
+    public static ProductResponseDTO toResponseDTO(ProductEntity entity) {
+        return new ProductResponseDTO(
+                entity.getId(),
+                entity.getName(),
+                entity.getScientificName(),
+                entity.getDescription(),
+                entity.getLongDescription(),
+                entity.getPrice(),
+                entity.getImageUrl(),
+                entity.getStockQuantity(),
+                entity.getRating(),
+                entity.isActive(),
+                entity.getDiscount(),
+                entity.getExpertAdvice(),
+                entity.getCategory() != null ? entity.getCategory().getId() : null,
+                entity.getCategory() != null ? entity.getCategory().getName() : null
+        );
     }
 }
+
