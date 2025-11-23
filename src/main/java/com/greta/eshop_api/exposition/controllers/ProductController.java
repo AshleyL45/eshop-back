@@ -10,6 +10,7 @@ import com.greta.eshop_api.persistence.repositories.CategoryRepository;
 import com.greta.eshop_api.persistence.repositories.ProductRepository;
 
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -117,7 +118,7 @@ public class ProductController {
 
     @PostMapping
     public ResponseEntity<ApiResponse> createProduct(
-            @RequestBody ProductRequestDTO request,
+            @Valid @RequestBody ProductRequestDTO request,
             HttpServletRequest httpRequest
     ) {
         CategoryEntity category = null;
@@ -138,10 +139,11 @@ public class ProductController {
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
+
     @PutMapping("/{id}")
     public ResponseEntity<ApiResponse> updateProduct(
             @PathVariable Long id,
-            @RequestBody ProductRequestDTO request,
+            @Valid @RequestBody ProductRequestDTO request,
             HttpServletRequest httpRequest
     ) {
         ProductEntity existing = productRepository.findById(id).orElse(null);
