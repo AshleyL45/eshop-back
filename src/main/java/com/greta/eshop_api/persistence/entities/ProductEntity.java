@@ -56,6 +56,12 @@ public class ProductEntity {
     @Column(nullable = false, columnDefinition = "TEXT")
     private String expertAdvice;
 
+    @Column(nullable = false)
+    private boolean active = true;
+
+    @Column(nullable = false)
+    private double discount = 0.0;
+
     @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
@@ -88,162 +94,134 @@ public class ProductEntity {
     public ProductEntity() {}
 
     public Long getId() {
-        return id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public String getScientificName() {
-        return scientificName;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public String getLongDescription() {
-        return longDescription;
-    }
-
-    public double getPrice() {
-        return price;
-    }
-
-    public String getImageUrl() {
-        return imageUrl;
-    }
-
-    public CategoryEntity getCategory() {
-        return category;
-    }
-
-    public int getStockQuantity() {
-        return stockQuantity;
-    }
-
-    public double getRating() {
-        return rating;
-    }
-
-    public CareInfoEntity getCareInfo() {
-        return careInfo;
-    }
-
-    public BotanicalInfoEntity getBotanicalInfo() {
-        return botanicalInfo;
-    }
-
-    public List<String> getSizeOptions() {
-        return sizeOptions;
-    }
-
-    public String getExpertAdvice() {
-        return expertAdvice;
-    }
-
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
-
-    public LocalDateTime getUpdatedAt() {
-        return updatedAt;
-    }
-
-    public List<OrderItemEntity> getOrderItems() {
-        return orderItems;
-    }
-
-    public List<CartItemEntity> getCartItems() {
-        return cartItems;
-    }
-
-    public List<FavoriteEntity> getFavorites() {
-        return favorites;
-    }
-
-    public List<ReviewEntity> getReviews() {
-        return reviews;
-    }
+        return id; }
 
     public void setId(Long id) {
-        this.id = id;
-    }
+        this.id = id; }
+
+    public String getName() {
+        return name; }
 
     public void setName(String name) {
-        this.name = name;
-    }
+        this.name = name; }
+
+    public String getScientificName() {
+        return scientificName; }
 
     public void setScientificName(String scientificName) {
-        this.scientificName = scientificName;
-    }
+        this.scientificName = scientificName; }
+
+    public String getDescription() {
+        return description; }
 
     public void setDescription(String description) {
-        this.description = description;
-    }
+        this.description = description; }
+
+    public String getLongDescription() {
+        return longDescription; }
 
     public void setLongDescription(String longDescription) {
-        this.longDescription = longDescription;
-    }
+        this.longDescription = longDescription; }
+
+    public double getPrice() {
+        return price; }
 
     public void setPrice(double price) {
-        this.price = price;
-    }
+        this.price = price; }
+
+    public String getImageUrl() {
+        return imageUrl; }
 
     public void setImageUrl(String imageUrl) {
-        this.imageUrl = imageUrl;
-    }
+        this.imageUrl = imageUrl; }
+
+    public CategoryEntity getCategory() {
+        return category; }
 
     public void setCategory(CategoryEntity category) {
-        this.category = category;
-    }
+        this.category = category; }
+
+    public int getStockQuantity() {
+        return stockQuantity; }
 
     public void setStockQuantity(int stockQuantity) {
-        this.stockQuantity = stockQuantity;
-    }
+        this.stockQuantity = stockQuantity; }
+
+    public double getRating() {
+        return rating; }
 
     public void setRating(double rating) {
-        this.rating = rating;
-    }
+        this.rating = rating; }
+
+    public CareInfoEntity getCareInfo() {
+        return careInfo; }
 
     public void setCareInfo(CareInfoEntity careInfo) {
-        this.careInfo = careInfo;
-    }
+        this.careInfo = careInfo; }
+
+    public BotanicalInfoEntity getBotanicalInfo() {
+        return botanicalInfo; }
 
     public void setBotanicalInfo(BotanicalInfoEntity botanicalInfo) {
-        this.botanicalInfo = botanicalInfo;
-    }
+        this.botanicalInfo = botanicalInfo; }
+
+    public List<String> getSizeOptions() {
+        return sizeOptions; }
 
     public void setSizeOptions(List<String> sizeOptions) {
-        this.sizeOptions = sizeOptions;
-    }
+        this.sizeOptions = sizeOptions; }
+
+    public String getExpertAdvice() {
+        return expertAdvice; }
 
     public void setExpertAdvice(String expertAdvice) {
-        this.expertAdvice = expertAdvice;
-    }
+        this.expertAdvice = expertAdvice; }
+
+    public boolean isActive() {
+        return active; }
+
+    public void setActive(boolean active) {
+        this.active = active; }
+
+    public double getDiscount() {
+        return discount; }
+
+    public void setDiscount(double discount) {
+        this.discount = discount; }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt; }
 
     public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
-    }
+        this.createdAt = createdAt; }
+
+    public LocalDateTime getUpdatedAt() {
+        return updatedAt; }
 
     public void setUpdatedAt(LocalDateTime updatedAt) {
-        this.updatedAt = updatedAt;
-    }
+        this.updatedAt = updatedAt; }
+
+    public List<OrderItemEntity> getOrderItems() {
+        return orderItems; }
 
     public void setOrderItems(List<OrderItemEntity> orderItems) {
-        this.orderItems = orderItems;
-    }
+        this.orderItems = orderItems; }
+
+    public List<CartItemEntity> getCartItems() {
+        return cartItems; }
 
     public void setCartItems(List<CartItemEntity> cartItems) {
-        this.cartItems = cartItems;
-    }
+        this.cartItems = cartItems; }
+
+    public List<FavoriteEntity> getFavorites() {
+        return favorites; }
 
     public void setFavorites(List<FavoriteEntity> favorites) {
-        this.favorites = favorites;
-    }
+        this.favorites = favorites; }
+
+    public List<ReviewEntity> getReviews() {
+        return reviews; }
 
     public void setReviews(List<ReviewEntity> reviews) {
-        this.reviews = reviews;
-    }
+        this.reviews = reviews; }
 }

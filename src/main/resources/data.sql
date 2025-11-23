@@ -61,27 +61,33 @@ insert into product_care_info (fertilizer, soil_type, sunlight, watering) values
 -- ============================
 --       PRODUCTS (20)
 -- ============================
-insert into product (name, scientific_name, description, long_description, image_url, expert_advice, price, rating, stock_quantity, created_at, updated_at, botanical_info_id, care_info_id, category_id) values
-('Monstera Deliciosa','Monstera deliciosa','Plante tropicale à larges feuilles perforées.','Idéale pour les intérieurs lumineux.','img/monstera.jpg','Éviter le soleil direct.',39.90,4.8,20,now(),now(),1,1,5),
-('Ficus Lyrata','Ficus lyrata','Plante d’intérieur très populaire.','Demande une lumière vive indirecte.','img/ficus.jpg','Attention au sur-arrosage.',49.90,4.6,12,now(),now(),2,2,1),
-('Aloe Vera','Aloe vera','Succulente médicinale résistante.','Très facile à entretenir.','img/aloe.jpg','Arroser rarement.',12.90,4.9,30,now(),now(),3,3,2),
-('Echeveria Elegans','Echeveria elegans','Petite succulente décorative.','Parfaite pour débutants.','img/echeveria.jpg','Soleil direct OK.',7.90,4.5,50,now(),now(),4,4,2),
-('Orchidée Phalaenopsis','Phalaenopsis spp.','Orchidée élégante.','Lumière indirecte indispensable.','img/orchidee.jpg','Ne pas rempoter trop souvent.',24.90,4.2,18,now(),now(),5,5,3),
-('Basilic','Ocimum basilicum','Aromatique incontournable.','Idéal pour la cuisine.','img/basilic.jpg','Pincer les têtes régulièrement.',5.90,4.7,40,now(),now(),6,6,4),
-('Calamondin','Citrus mitis','Petit agrume décoratif.','Produit de petits fruits.','img/calamondin.jpg','Aime le soleil.',29.90,4.4,15,now(),now(),7,7,3),
-('Schefflera','Schefflera arboricola','Plante robuste.','Supporte la mi-ombre.','img/schefflera.jpg','Arroser modérément.',22.90,4.1,25,now(),now(),8,8,1),
-('Peperomia','Peperomia obtusifolia','Petite plante facile.','Peu exigeante.','img/peperomia.jpg','Éviter excès d’eau.',12.90,4.7,30,now(),now(),9,9,1),
-('Palmier Areca','Dypsis lutescens','Palmier intérieur.','Purifie l’air.','img/areca.jpg','Aime l’humidité.',34.90,4.6,20,now(),now(),10,10,5),
-('Philodendron Birkin','Philodendron birkin','Plante graphique.','Feuilles striées.','img/birkin.jpg','Éviter soleil direct.',28.90,4.8,22,now(),now(),11,11,5),
-('Alocasia Polly','Alocasia amazonica','Plante tropicale.','Feuilles nervurées.','img/polly.jpg','Maintenir humidité élevée.',32.90,4.4,10,now(),now(),12,12,5),
-('Kalanchoe','Kalanchoe blossfeldiana','Succulente fleurie.','Floraison durable.','img/kalanchoe.jpg','Arrosage modéré.',8.90,4.5,40,now(),now(),13,13,3),
-('Cactus Peruvianus','Cereus peruvianus','Cactus haut.','Très résistant.','img/cactus.jpg','Peu d’eau.',15.90,4.6,25,now(),now(),14,14,2),
-('Fougère de Boston','Nephrolepis exaltata','Fougère décorative.','Aime l’humidité.','img/fougere.jpg','Pulvériser souvent.',19.90,4.3,20,now(),now(),15,15,1),
-('Alocasia Frydek','Alocasia micholitziana','Tropicale rare.','Feuilles veloutées.','img/frydek.jpg','Exigeante.',44.90,4.7,10,now(),now(),16,16,5),
-('Epipremnum Aureum','Epipremnum aureum','Plante très facile.','Purifie l’air.','img/pothos.jpg','Idéal débutants.',14.90,4.9,35,now(),now(),17,17,1),
-('Sansevieria','Sansevieria trifasciata','Plante increvable.','Supporte oubli arrosage.','img/sansevieria.jpg','Peu d’entretien.',19.90,4.7,30,now(),now(),18,18,2),
-('Calathea Orbifolia','Calathea orbifolia','Feuilles larges décoratives.','Demande humidité.','img/calathea.jpg','Pas de soleil direct.',27.90,4.4,15,now(),now(),19,19,5),
-('Sedum Morganianum','Sedum morganianum','Succulente tombante.','Très décorative.','img/sedum.jpg','Très peu d’eau.',11.90,4.8,50,now(),now(),20,20,2);
+INSERT INTO product (
+    name, scientific_name, description, long_description, image_url, expert_advice,
+    price, rating, stock_quantity, created_at, updated_at,
+    botanical_info_id, care_info_id, category_id,
+    active, discount
+) VALUES
+('Monstera Deliciosa','Monstera deliciosa','Plante tropicale à larges feuilles perforées.','Idéale pour les intérieurs lumineux.','img/monstera.jpg','Éviter le soleil direct.',39.90,4.8,20,now(),now(),1,1,5,true,0.0),
+('Ficus Lyrata','Ficus lyrata','Plante d’intérieur très populaire.','Demande une lumière vive indirecte.','img/ficus.jpg','Attention au sur-arrosage.',49.90,4.6,12,now(),now(),2,2,1,true,0.0),
+('Aloe Vera','Aloe vera','Succulente médicinale résistante.','Très facile à entretenir.','img/aloe.jpg','Arroser rarement.',12.90,4.9,30,now(),now(),3,3,2,true,0.0),
+('Echeveria Elegans','Echeveria elegans','Petite succulente décorative.','Parfaite pour débutants.','img/echeveria.jpg','Soleil direct OK.',7.90,4.5,50,now(),now(),4,4,2,true,0.0),
+('Orchidée Phalaenopsis','Phalaenopsis spp.','Orchidée élégante.','Lumière indirecte indispensable.','img/orchidee.jpg','Ne pas rempoter trop souvent.',24.90,4.2,18,now(),now(),5,5,3,true,0.0),
+('Basilic','Ocimum basilicum','Aromatique incontournable.','Idéal pour la cuisine.','img/basilic.jpg','Pincer les têtes régulièrement.',5.90,4.7,40,now(),now(),6,6,4,true,0.0),
+('Calamondin','Citrus mitis','Petit agrume décoratif.','Produit de petits fruits.','img/calamondin.jpg','Aime le soleil.',29.90,4.4,15,now(),now(),7,7,3,true,0.0),
+('Schefflera','Schefflera arboricola','Plante robuste.','Supporte la mi-ombre.','img/schefflera.jpg','Arroser modérément.',22.90,4.1,25,now(),now(),8,8,1,true,0.0),
+('Peperomia','Peperomia obtusifolia','Petite plante facile.','Peu exigeante.','img/peperomia.jpg','Éviter excès d’eau.',12.90,4.7,30,now(),now(),9,9,1,true,0.0),
+('Palmier Areca','Dypsis lutescens','Palmier intérieur.','Purifie l’air.','img/areca.jpg','Aime l’humidité.',34.90,4.6,20,now(),now(),10,10,5,true,0.0),
+('Philodendron Birkin','Philodendron birkin','Plante graphique.','Feuilles striées.','img/birkin.jpg','Éviter soleil direct.',28.90,4.8,22,now(),now(),11,11,5,true,0.0),
+('Alocasia Polly','Alocasia amazonica','Plante tropicale.','Feuilles nervurées.','img/polly.jpg','Maintenir humidité élevée.',32.90,4.4,10,now(),now(),12,12,5,true,0.0),
+('Kalanchoe','Kalanchoe blossfeldiana','Succulente fleurie.','Floraison durable.','img/kalanchoe.jpg','Arrosage modéré.',8.90,4.5,40,now(),now(),13,13,3,true,0.0),
+('Cactus Peruvianus','Cereus peruvianus','Cactus haut.','Très résistant.','img/cactus.jpg','Peu d’eau.',15.90,4.6,25,now(),now(),14,14,2,true,0.0),
+('Fougère de Boston','Nephrolepis exaltata','Fougère décorative.','Aime l’humidité.','img/fougere.jpg','Pulvériser souvent.',19.90,4.3,20,now(),now(),15,15,1,true,0.0),
+('Alocasia Frydek','Alocasia micholitziana','Tropicale rare.','Feuilles veloutées.','img/frydek.jpg','Exigeante.',44.90,4.7,10,now(),now(),16,16,5,true,0.0),
+('Epipremnum Aureum','Epipremnum aureum','Plante très facile.','Purifie l’air.','img/pothos.jpg','Idéal débutants.',14.90,4.9,35,now(),now(),17,17,1,true,0.0),
+('Sansevieria','Sansevieria trifasciata','Plante increvable.','Supporte oubli arrosage.','img/sansevieria.jpg','Peu d’entretien.',19.90,4.7,30,now(),now(),18,18,2,true,0.0),
+('Calathea Orbifolia','Calathea orbifolia','Feuilles larges décoratives.','Demande humidité.','img/calathea.jpg','Pas de soleil direct.',27.90,4.4,15,now(),now(),19,19,5,true,0.0),
+('Sedum Morganianum','Sedum morganianum','Succulente tombante.','Très décorative.','img/sedum.jpg','Très peu d’eau.',11.90,4.8,50,now(),now(),20,20,2,true,0.0);
+
 
 -- ============================
 --    SIZE OPTIONS (4 types x produits)
