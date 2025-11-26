@@ -25,7 +25,6 @@ public class ProductService {
         this.categoryRepository = categoryRepository;
     }
 
-    // GET ALL
     public List<ProductResponseDTO> findAll() {
         return productRepository.findAll()
                 .stream()
@@ -33,14 +32,12 @@ public class ProductService {
                 .toList();
     }
 
-    // GET BY ID
     public ProductResponseDTO findById(Long id) {
         ProductEntity entity = productRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Produit introuvable"));
         return ProductMapper.toResponseDTO(entity);
     }
 
-    // SEARCH
     public List<ProductResponseDTO> search(String name, Double maxPrice, String category) {
         List<ProductEntity> products = productRepository.findAll();
 
@@ -68,7 +65,6 @@ public class ProductService {
                 .toList();
     }
 
-    // CREATE
     public ProductResponseDTO create(ProductRequestDTO request) {
 
         CategoryEntity category = null;
@@ -86,7 +82,6 @@ public class ProductService {
         return ProductMapper.toResponseDTO(saved);
     }
 
-    // UPDATE
     public ProductResponseDTO update(Long id, ProductRequestDTO request) {
         ProductEntity existing = productRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Produit introuvable"));
@@ -116,7 +111,6 @@ public class ProductService {
         return ProductMapper.toResponseDTO(saved);
     }
 
-    // DELETE
     public void delete(Long id) {
         if (!productRepository.existsById(id)) {
             throw new ResourceNotFoundException("Produit introuvable");

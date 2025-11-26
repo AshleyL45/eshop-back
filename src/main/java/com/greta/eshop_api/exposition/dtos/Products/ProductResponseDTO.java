@@ -1,5 +1,8 @@
 package com.greta.eshop_api.exposition.dtos.Products;
 
+import com.greta.eshop_api.exposition.dtos.BotanicalInfo.BotanicalInfoResponseDTO;
+import com.greta.eshop_api.exposition.dtos.CareInfo.CareInfoResponseDTO;
+
 public record ProductResponseDTO(
         Long id,
         String name,
@@ -14,6 +17,7 @@ public record ProductResponseDTO(
         double discount,
         String expertAdvice,
         Long categoryId,
-        String categoryName
-) {}
+        String categoryName,
 
+        BotanicalInfoResponseDTO botanicalInfo,
+        CareInfoResponseDTO careInfo) {}

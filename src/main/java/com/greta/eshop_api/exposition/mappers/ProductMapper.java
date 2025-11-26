@@ -5,6 +5,7 @@ import com.greta.eshop_api.exposition.dtos.Products.ProductResponseDTO;
 import com.greta.eshop_api.persistence.entities.CategoryEntity;
 import com.greta.eshop_api.persistence.entities.ProductEntity;
 
+
 public class ProductMapper {
 
     public static ProductEntity toEntity(ProductRequestDTO dto, CategoryEntity category) {
@@ -24,6 +25,15 @@ public class ProductMapper {
         entity.setExpertAdvice(dto.expertAdvice());
         entity.setCategory(category);
 
+        entity.setBotanicalInfo(
+                BotanicalInfoMapper.toEntity(dto.botanicalInfo(), entity)
+        );
+
+        entity.setCareInfo(
+                CareInfoMapper.toEntity(dto.careInfo(), entity)
+        );
+
+
         return entity;
     }
 
@@ -42,8 +52,10 @@ public class ProductMapper {
                 entity.getDiscount(),
                 entity.getExpertAdvice(),
                 entity.getCategory() != null ? entity.getCategory().getId() : null,
-                entity.getCategory() != null ? entity.getCategory().getName() : null
+                entity.getCategory() != null ? entity.getCategory().getName() : null,
+
+                BotanicalInfoMapper.toResponseDTO(entity.getBotanicalInfo()),
+                CareInfoMapper.toResponseDTO(entity.getCareInfo())
         );
     }
 }
-

@@ -1,5 +1,7 @@
 package com.greta.eshop_api.exposition.dtos.Products;
 
+import com.greta.eshop_api.exposition.dtos.BotanicalInfo.BotanicalInfoRequestDTO;
+import com.greta.eshop_api.exposition.dtos.CareInfo.CareInfoRequestDTO;
 import jakarta.validation.constraints.*;
 
 public record ProductRequestDTO(
@@ -51,6 +53,12 @@ public record ProductRequestDTO(
         String expertAdvice,
 
         @NotNull(message = "L'ID de la catégorie est obligatoire")
-        Long categoryId
+        Long categoryId,
+
+        @NotNull
+        BotanicalInfoRequestDTO botanicalInfo,
+
+        @NotNull
+        CareInfoRequestDTO careInfo
 
 ) {}
