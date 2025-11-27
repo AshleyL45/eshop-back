@@ -55,4 +55,11 @@ public class ApiResponse<T> {
         ApiResponse<T> response = new ApiResponse<>(status, message, path, null);
         return ResponseEntity.status(status).body(response);
     }
+
+    public static <T> ResponseEntity<ApiResponse<T>> created(String message, String path, T data) {
+        ApiResponse<T> response = new ApiResponse<>(201, message, path, data);
+        return ResponseEntity.status(201).body(response);
+    }
+
 }
+

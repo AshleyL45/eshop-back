@@ -1,5 +1,6 @@
 package com.greta.eshop_api.persistence.entities;
 
+import com.greta.eshop_api.domain.enums.OrderStatus;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -29,16 +30,21 @@ public class OrderEntity {
 
     @OneToMany(
             mappedBy = "order",
-            cascade = {CascadeType.PERSIST, CascadeType.MERGE},
-            orphanRemoval = false
+            cascade = CascadeType.ALL,
+            orphanRemoval = true
     )
     private List<OrderItemEntity> items;
 
-    @OneToOne(
-            mappedBy = "order",
-            cascade = {CascadeType.PERSIST, CascadeType.MERGE}
-    )
+
+    @OneToOne(mappedBy = "order",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true)
     private PaymentEntity payment;
+
+
+
+    @Enumerated(EnumType.STRING)
+    private OrderStatus status;
 
     public OrderEntity() {}
 
@@ -96,5 +102,13 @@ public class OrderEntity {
 
     public void setPayment(PaymentEntity payment) {
         this.payment = payment;
+    }
+
+    public OrderStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(OrderStatus status) {
+        this.status = status;
     }
 }

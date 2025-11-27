@@ -85,4 +85,18 @@ public class GlobalExceptionHandler {
 
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(resp);
     }
+
+    public ResponseEntity<ApiResponse> handleBadRequest(
+            IllegalStateException ex,
+            HttpServletRequest request
+    ) {
+        ApiResponse resp = new ApiResponse(
+                400,
+                ex.getMessage(),
+                request.getRequestURI(),
+                null
+        );
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(resp);
+    }
 }
