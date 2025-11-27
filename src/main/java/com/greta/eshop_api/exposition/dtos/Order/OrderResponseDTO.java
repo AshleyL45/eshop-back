@@ -1,5 +1,6 @@
 package com.greta.eshop_api.exposition.dtos.Order;
 
+import com.greta.eshop_api.exposition.dtos.Customer.CustomerResponseDTO;
 import com.greta.eshop_api.exposition.dtos.OrderItem.OrderItemResponseDTO;
 import com.greta.eshop_api.exposition.dtos.Payment.PaymentResponseDTO;
 
@@ -10,9 +11,13 @@ public class OrderResponseDTO {
 
     private Long id;
     private LocalDateTime orderDate;
+
     private Long customerId;
+    private CustomerResponseDTO customer;
+
     private Long shippingAddressId;
     private Long billingAddressId;
+
     private List<OrderItemResponseDTO> items;
     private PaymentResponseDTO payment;
     private String status;
@@ -25,6 +30,9 @@ public class OrderResponseDTO {
 
     public Long getCustomerId() { return customerId; }
     public void setCustomerId(Long customerId) { this.customerId = customerId; }
+
+    public CustomerResponseDTO getCustomer() { return customer; }
+    public void setCustomer(CustomerResponseDTO customer) { this.customer = customer; }
 
     public Long getShippingAddressId() { return shippingAddressId; }
     public void setShippingAddressId(Long shippingAddressId) { this.shippingAddressId = shippingAddressId; }

@@ -13,7 +13,11 @@ public class OrderMapper {
 
         dto.setId(entity.getId());
         dto.setOrderDate(entity.getOrderDate());
+
         dto.setCustomerId(entity.getCustomer().getId());
+
+        dto.setCustomer(CustomerMapper.toResponseDTO(entity.getCustomer()));
+
         dto.setShippingAddressId(entity.getShippingAddress().getId());
         dto.setBillingAddressId(entity.getBillingAddress().getId());
         dto.setStatus(entity.getStatus().name());
