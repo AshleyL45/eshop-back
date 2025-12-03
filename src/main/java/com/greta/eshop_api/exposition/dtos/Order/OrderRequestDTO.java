@@ -10,6 +10,14 @@ public class OrderRequestDTO {
     private Long shippingAddressId;
     private Long billingAddressId;
 
+    public OrderRequestDTO(Long customerId, Long shippingAddressId, Long billingAddressId,
+                           List<OrderItemRequestDTO> items) {
+        this.customerId = customerId;
+        this.shippingAddressId = shippingAddressId;
+        this.billingAddressId = billingAddressId;
+        this.items = items;
+    }
+
     private List<OrderItemRequestDTO> items;
 
     public Long getCustomerId() { return customerId; }

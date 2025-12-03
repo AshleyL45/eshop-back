@@ -4,6 +4,11 @@ public class OrderItemRequestDTO {
     private Long productId;
     private int quantity;
 
+    public OrderItemRequestDTO(Long productId, int quantity) {
+        this.productId = productId;
+        this.quantity = quantity;
+    }
+
     public Long getProductId() { return productId; }
     public void setProductId(Long productId) { this.productId = productId; }
 
