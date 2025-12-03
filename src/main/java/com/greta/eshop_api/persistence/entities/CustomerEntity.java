@@ -21,6 +21,11 @@ public class CustomerEntity {
     @OneToMany(mappedBy = "customer")
     private List<OrderEntity> orders;
 
+    @OneToOne
+    @JoinColumn(name = "user_id", nullable = false, unique = true)
+    private UserEntity user;
+
+
     public CustomerEntity() {}
 
     public Long getId() {
@@ -70,4 +75,13 @@ public class CustomerEntity {
     public void setOrders(List<OrderEntity> orders) {
         this.orders = orders;
     }
+
+    public UserEntity getUser() {
+        return user;
+    }
+
+    public void setUser(UserEntity user) {
+        this.user = user;
+    }
+
 }
