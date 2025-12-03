@@ -25,27 +25,51 @@ public class OrderResponseDTO {
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 
-    public LocalDateTime getOrderDate() { return orderDate; }
-    public void setOrderDate(LocalDateTime orderDate) { this.orderDate = orderDate; }
+    public LocalDateTime getOrderDate() {
+        return orderDate; }
 
-    public Long getCustomerId() { return customerId; }
-    public void setCustomerId(Long customerId) { this.customerId = customerId; }
+    public void setOrderDate(LocalDateTime orderDate) {
+        this.orderDate = orderDate; }
 
-    public CustomerResponseDTO getCustomer() { return customer; }
-    public void setCustomer(CustomerResponseDTO customer) { this.customer = customer; }
+    public Long getCustomerId() {
+        return customerId; }
 
-    public Long getShippingAddressId() { return shippingAddressId; }
-    public void setShippingAddressId(Long shippingAddressId) { this.shippingAddressId = shippingAddressId; }
+    public void setCustomerId(Long customerId) {
+        this.customerId = customerId; }
 
-    public Long getBillingAddressId() { return billingAddressId; }
-    public void setBillingAddressId(Long billingAddressId) { this.billingAddressId = billingAddressId; }
+    public CustomerResponseDTO getCustomer() {
+        return customer; }
 
-    public List<OrderItemResponseDTO> getItems() { return items; }
-    public void setItems(List<OrderItemResponseDTO> items) { this.items = items; }
+    public void setCustomer(CustomerResponseDTO customer) {
+        this.customer = customer; }
 
-    public PaymentResponseDTO getPayment() { return payment; }
-    public void setPayment(PaymentResponseDTO payment) { this.payment = payment; }
+    public Long getShippingAddressId() {
+        return shippingAddressId; }
 
-    public String getStatus() { return status; }
-    public void setStatus(String status) { this.status = status; }
+    public void setShippingAddressId(Long shippingAddressId) {
+        this.shippingAddressId = shippingAddressId; }
+
+    public Long getBillingAddressId() {
+        return billingAddressId; }
+
+    public void setBillingAddressId(Long billingAddressId) {
+        this.billingAddressId = billingAddressId; }
+
+    public List<OrderItemResponseDTO> getItems() {
+        return items; }
+
+    public void setItems(List<OrderItemResponseDTO> items) {
+        this.items = items; }
+
+    public PaymentResponseDTO getPayment() {
+        return payment; }
+
+    public void setPayment(PaymentResponseDTO payment) {
+        this.payment = payment; }
+
+    public String getStatus() {
+        return status; }
+
+    public void setStatus(String status) {
+        this.status = status; }
 }

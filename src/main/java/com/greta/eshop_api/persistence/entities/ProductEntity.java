@@ -2,6 +2,7 @@ package com.greta.eshop_api.persistence.entities;
 
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -78,8 +79,8 @@ public class ProductEntity {
     @OneToMany(mappedBy = "product")
     private List<FavoriteEntity> favorites;
 
-    @OneToMany(mappedBy = "product")
-    private List<ReviewEntity> reviews;
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<ReviewEntity> reviews = new ArrayList<>();
 
     @PrePersist
     public void onCreate() {

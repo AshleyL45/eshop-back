@@ -1,6 +1,5 @@
 package com.greta.eshop_api.exposition.controllers;
 
-import com.greta.eshop_api.domain.enums.OrderStatus;
 import com.greta.eshop_api.domain.services.OrderService;
 import com.greta.eshop_api.exposition.dtos.ApiResponse;
 import com.greta.eshop_api.exposition.dtos.Order.OrderRequestDTO;
@@ -12,6 +11,8 @@ import com.greta.eshop_api.exposition.dtos.Payment.PaymentUpdateDTO;
 import com.greta.eshop_api.exposition.mappers.OrderItemMapper;
 import com.greta.eshop_api.exposition.mappers.OrderMapper;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.Valid;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -29,16 +30,18 @@ public class OrderController {
 
     @PostMapping
     public ResponseEntity<ApiResponse<OrderResponseDTO>> create(
-            @RequestBody OrderRequestDTO dto,
+            @Valid @RequestBody OrderRequestDTO dto,
             HttpServletRequest request
     ) {
         var order = orderService.createOrder(dto);
 
-        return ApiResponse.created(
-                "Commande créée",
-                request.getRequestURI(),
-                OrderMapper.toResponseDTO(order)
-        );
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(new ApiResponse<>(
+                        201,
+                        "Commande créée",
+                        request.getRequestURI(),
+                        OrderMapper.toResponseDTO(order)
+                ));
     }
 
     @GetMapping("/{id}")
@@ -48,26 +51,30 @@ public class OrderController {
     ) {
         var order = orderService.getById(id);
 
-        return ApiResponse.ok(
-                "Commande récupérée",
-                request.getRequestURI(),
-                OrderMapper.toResponseDTO(order)
+        return ResponseEntity.ok(
+                new ApiResponse<>(
+                        200,
+                        "Commande récupérée",
+                        request.getRequestURI(),
+                        OrderMapper.toResponseDTO(order)
+                )
         );
     }
 
     @GetMapping
-    public ResponseEntity<ApiResponse<List<OrderResponseDTO>>> getAll(
-            HttpServletRequest request
-    ) {
-        var orders = orderService.getAll()
+    public ResponseEntity<ApiResponse<List<OrderResponseDTO>>> getAll(HttpServletRequest request) {
+        List<OrderResponseDTO> orders = orderService.getAll()
                 .stream()
                 .map(OrderMapper::toResponseDTO)
                 .toList();
 
-        return ApiResponse.ok(
-                "Liste des commandes",
-                request.getRequestURI(),
-                orders
+        return ResponseEntity.ok(
+                new ApiResponse<>(
+                        200,
+                        "Liste des commandes",
+                        request.getRequestURI(),
+                        orders
+                )
         );
     }
 
@@ -76,15 +83,18 @@ public class OrderController {
             @PathVariable Long customerId,
             HttpServletRequest request
     ) {
-        var orders = orderService.getOrdersByCustomer(customerId)
+        List<OrderResponseDTO> orders = orderService.getOrdersByCustomer(customerId)
                 .stream()
                 .map(OrderMapper::toResponseDTO)
                 .toList();
 
-        return ApiResponse.ok(
-                "Commandes du client",
-                request.getRequestURI(),
-                orders
+        return ResponseEntity.ok(
+                new ApiResponse<>(
+                        200,
+                        "Commandes du client",
+                        request.getRequestURI(),
+                        orders
+                )
         );
     }
 
@@ -92,45 +102,54 @@ public class OrderController {
     public ResponseEntity<ApiResponse<OrderItemResponseDTO>> updateItem(
             @PathVariable Long orderId,
             @PathVariable Long itemId,
-            @RequestBody OrderItemUpdateDTO dto,
+            @Valid @RequestBody OrderItemUpdateDTO dto,
             HttpServletRequest request
     ) {
         var updatedItem = orderService.updateOrderItem(orderId, itemId, dto);
 
-        return ApiResponse.ok(
-                "Article mis à jour",
-                request.getRequestURI(),
-                OrderItemMapper.toResponseDTO(updatedItem)
+        return ResponseEntity.ok(
+                new ApiResponse<>(
+                        200,
+                        "Article mis à jour",
+                        request.getRequestURI(),
+                        OrderItemMapper.toResponseDTO(updatedItem)
+                )
         );
     }
 
     @PutMapping("/{id}/payment")
     public ResponseEntity<ApiResponse<OrderResponseDTO>> updatePayment(
             @PathVariable Long id,
-            @RequestBody PaymentUpdateDTO dto,
+            @Valid @RequestBody PaymentUpdateDTO dto,
             HttpServletRequest request
     ) {
         var order = orderService.updatePayment(id, dto);
 
-        return ApiResponse.ok(
-                "Paiement mis à jour",
-                request.getRequestURI(),
-                OrderMapper.toResponseDTO(order)
+        return ResponseEntity.ok(
+                new ApiResponse<>(
+                        200,
+                        "Paiement mis à jour",
+                        request.getRequestURI(),
+                        OrderMapper.toResponseDTO(order)
+                )
         );
     }
 
     @PatchMapping("/{id}/status")
     public ResponseEntity<ApiResponse<OrderResponseDTO>> updateStatus(
             @PathVariable Long id,
-            @RequestBody OrderStatusUpdateDTO dto,
+            @Valid @RequestBody OrderStatusUpdateDTO dto,
             HttpServletRequest request
     ) {
         var order = orderService.updateStatus(id, dto.getStatus());
 
-        return ApiResponse.ok(
-                "Statut mis à jour",
-                request.getRequestURI(),
-                OrderMapper.toResponseDTO(order)
+        return ResponseEntity.ok(
+                new ApiResponse<>(
+                        200,
+                        "Statut mis à jour",
+                        request.getRequestURI(),
+                        OrderMapper.toResponseDTO(order)
+                )
         );
     }
 
@@ -141,10 +160,13 @@ public class OrderController {
     ) {
         var order = orderService.cancelOrder(id);
 
-        return ApiResponse.ok(
-                "Commande annulée",
-                request.getRequestURI(),
-                OrderMapper.toResponseDTO(order)
+        return ResponseEntity.ok(
+                new ApiResponse<>(
+                        200,
+                        "Commande annulée",
+                        request.getRequestURI(),
+                        OrderMapper.toResponseDTO(order)
+                )
         );
     }
 
@@ -155,10 +177,13 @@ public class OrderController {
     ) {
         orderService.deleteOrder(id);
 
-        return ApiResponse.ok(
-                "Commande supprimée",
-                request.getRequestURI(),
-                null
+        return ResponseEntity.ok(
+                new ApiResponse<>(
+                        200,
+                        "Commande supprimée",
+                        request.getRequestURI(),
+                        null
+                )
         );
     }
 
@@ -167,16 +192,18 @@ public class OrderController {
             @RequestParam String query,
             HttpServletRequest request
     ) {
-        var orders = orderService.search(query)
+        List<OrderResponseDTO> orders = orderService.search(query)
                 .stream()
                 .map(OrderMapper::toResponseDTO)
                 .toList();
 
-        return ApiResponse.ok(
-                "Résultats de la recherche",
-                request.getRequestURI(),
-                orders
+        return ResponseEntity.ok(
+                new ApiResponse<>(
+                        200,
+                        "Résultats de la recherche",
+                        request.getRequestURI(),
+                        orders
+                )
         );
     }
-
 }

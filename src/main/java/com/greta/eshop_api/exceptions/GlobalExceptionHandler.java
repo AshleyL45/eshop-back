@@ -2,7 +2,7 @@ package com.greta.eshop_api.exceptions;
 
 import com.greta.eshop_api.exposition.dtos.ApiResponse;
 import jakarta.servlet.http.HttpServletRequest;
-
+import jakarta.validation.ConstraintViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
@@ -18,20 +18,19 @@ import java.util.Map;
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<ApiResponse> handleValidationExceptions(
+    public ResponseEntity<ApiResponse<Map<String, String>>> handleValidationExceptions(
             MethodArgumentNotValidException ex,
             HttpServletRequest request
     ) {
-
         Map<String, String> errors = new HashMap<>();
 
         ex.getBindingResult().getAllErrors().forEach(error -> {
-            String fieldName = ((FieldError) error).getField();
-            String errorMessage = error.getDefaultMessage();
-            errors.put(fieldName, errorMessage);
+            String field = ((FieldError) error).getField();
+            String message = error.getDefaultMessage();
+            errors.put(field, message);
         });
 
-        ApiResponse resp = new ApiResponse(
+        ApiResponse<Map<String, String>> resp = new ApiResponse<>(
                 400,
                 "Erreur de validation",
                 request.getRequestURI(),
@@ -41,12 +40,26 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(resp);
     }
 
+    @ExceptionHandler(ConstraintViolationException.class)
+    public ResponseEntity<ApiResponse<String>> handleConstraintViolation(
+            ConstraintViolationException ex,
+            HttpServletRequest request
+    ) {
+        ApiResponse<String> resp = new ApiResponse<>(
+                400,
+                ex.getMessage(),
+                request.getRequestURI(),
+                null
+        );
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(resp);
+    }
+
     @ExceptionHandler(ResourceNotFoundException.class)
-    public ResponseEntity<ApiResponse> handleResourceNotFound(
+    public ResponseEntity<ApiResponse<Void>> handleResourceNotFound(
             ResourceNotFoundException ex,
             HttpServletRequest request
     ) {
-        ApiResponse resp = new ApiResponse(
+        ApiResponse<Void> resp = new ApiResponse<>(
                 404,
                 ex.getMessage(),
                 request.getRequestURI(),
@@ -57,13 +70,13 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(NoHandlerFoundException.class)
-    public ResponseEntity<ApiResponse> handleNotFoundError(
+    public ResponseEntity<ApiResponse<Void>> handleNotFoundError(
             NoHandlerFoundException ex,
             HttpServletRequest request
     ) {
-        ApiResponse resp = new ApiResponse(
+        ApiResponse<Void> resp = new ApiResponse<>(
                 404,
-                "Erreur 404 : Le chemin que vous avez demandé n'existe pas.",
+                "Erreur 404 : Endpoint non trouvé",
                 request.getRequestURI(),
                 null
         );
@@ -71,26 +84,12 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(resp);
     }
 
-    @ExceptionHandler(Exception.class)
-    public ResponseEntity<ApiResponse> handleGenericException(
-            Exception ex,
-            HttpServletRequest request
-    ) {
-        ApiResponse resp = new ApiResponse(
-                500,
-                ex.getMessage(),
-                request.getRequestURI(),
-                null
-        );
-
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(resp);
-    }
-
-    public ResponseEntity<ApiResponse> handleBadRequest(
+    @ExceptionHandler(IllegalStateException.class)
+    public ResponseEntity<ApiResponse<Void>> handleBadRequest(
             IllegalStateException ex,
             HttpServletRequest request
     ) {
-        ApiResponse resp = new ApiResponse(
+        ApiResponse<Void> resp = new ApiResponse<>(
                 400,
                 ex.getMessage(),
                 request.getRequestURI(),
@@ -98,5 +97,20 @@ public class GlobalExceptionHandler {
         );
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(resp);
+    }
+
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<ApiResponse<Void>> handleGenericException(
+            Exception ex,
+            HttpServletRequest request
+    ) {
+        ApiResponse<Void> resp = new ApiResponse<>(
+                500,
+                ex.getMessage(),
+                request.getRequestURI(),
+                null
+        );
+
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(resp);
     }
 }

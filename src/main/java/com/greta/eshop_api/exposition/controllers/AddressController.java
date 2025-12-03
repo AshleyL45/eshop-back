@@ -4,13 +4,10 @@ import com.greta.eshop_api.domain.services.AddressService;
 import com.greta.eshop_api.exposition.dtos.Adresses.AddressRequestDTO;
 import com.greta.eshop_api.exposition.dtos.Adresses.AddressResponseDTO;
 import com.greta.eshop_api.exposition.dtos.ApiResponse;
-
-
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
-
-import org.springframework.http.ResponseEntity;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -26,51 +23,98 @@ public class AddressController {
     }
 
     @GetMapping
-    public ResponseEntity<ApiResponse> getAll(HttpServletRequest request) {
+    public ResponseEntity<ApiResponse<List<AddressResponseDTO>>> getAll(HttpServletRequest request) {
         List<AddressResponseDTO> dtos = service.findAll();
-        ApiResponse resp = new ApiResponse(200, "Liste des adresses", request.getRequestURI(), dtos);
-        return ResponseEntity.ok(resp);
+
+        return ResponseEntity.ok(
+                new ApiResponse<>(
+                        200,
+                        "Liste des adresses",
+                        request.getRequestURI(),
+                        dtos
+                )
+        );
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ApiResponse> getById(@PathVariable Long id, HttpServletRequest request) {
+    public ResponseEntity<ApiResponse<AddressResponseDTO>> getById(
+            @PathVariable Long id,
+            HttpServletRequest request
+    ) {
         AddressResponseDTO dto = service.findById(id);
-        ApiResponse resp = new ApiResponse(200, "Adresse récupérée", request.getRequestURI(), dto);
-        return ResponseEntity.ok(resp);
+
+        return ResponseEntity.ok(
+                new ApiResponse<>(
+                        200,
+                        "Adresse récupérée",
+                        request.getRequestURI(),
+                        dto
+                )
+        );
     }
 
     @PostMapping
-    public ResponseEntity<ApiResponse> create(
+    public ResponseEntity<ApiResponse<AddressResponseDTO>> create(
             @Valid @RequestBody AddressRequestDTO dto,
             HttpServletRequest request
     ) {
         AddressResponseDTO created = service.create(dto);
-        ApiResponse resp = new ApiResponse(201, "Adresse créée", request.getRequestURI(), created);
-        return ResponseEntity.status(HttpStatus.CREATED).body(resp);
+
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(new ApiResponse<>(
+                        201,
+                        "Adresse créée",
+                        request.getRequestURI(),
+                        created
+                ));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ApiResponse> update(
+    public ResponseEntity<ApiResponse<AddressResponseDTO>> update(
             @PathVariable Long id,
             @Valid @RequestBody AddressRequestDTO dto,
             HttpServletRequest request
     ) {
         AddressResponseDTO updated = service.update(id, dto);
-        ApiResponse resp = new ApiResponse(200, "Adresse mise à jour", request.getRequestURI(), updated);
-        return ResponseEntity.ok(resp);
+
+        return ResponseEntity.ok(
+                new ApiResponse<>(
+                        200,
+                        "Adresse mise à jour",
+                        request.getRequestURI(),
+                        updated
+                )
+        );
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<ApiResponse> delete(@PathVariable Long id, HttpServletRequest request) {
+    public ResponseEntity<ApiResponse<Void>> delete(
+            @PathVariable Long id,
+            HttpServletRequest request
+    ) {
         service.delete(id);
-        ApiResponse resp = new ApiResponse(204, "Adresse supprimée", request.getRequestURI(), null);
-        return ResponseEntity.status(204).body(resp);
+
+        return ResponseEntity.ok(
+                new ApiResponse<>(
+                        200,
+                        "Adresse supprimée",
+                        request.getRequestURI(),
+                        null
+                )
+        );
     }
 
     @DeleteMapping("/all")
-    public ResponseEntity<ApiResponse> deleteAll(HttpServletRequest request) {
+    public ResponseEntity<ApiResponse<Void>> deleteAll(HttpServletRequest request) {
         service.deleteAll();
-        ApiResponse resp = new ApiResponse(204, "Toutes les adresses supprimées", request.getRequestURI(), null);
-        return ResponseEntity.status(204).body(resp);
+
+        return ResponseEntity.ok(
+                new ApiResponse<>(
+                        200,
+                        "Toutes les adresses supprimées",
+                        request.getRequestURI(),
+                        null
+                )
+        );
     }
 }
