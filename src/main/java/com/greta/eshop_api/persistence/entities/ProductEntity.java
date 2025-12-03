@@ -1,6 +1,8 @@
 package com.greta.eshop_api.persistence.entities;
 
 import jakarta.persistence.*;
+
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -69,6 +71,12 @@ public class ProductEntity {
 
     @Column(nullable = false)
     private LocalDateTime updatedAt;
+
+    @Column
+    private LocalDate promoStart;
+
+    @Column
+    private LocalDate promoEnd;
 
     @OneToMany(mappedBy = "product")
     private List<OrderItemEntity> orderItems;
@@ -226,4 +234,20 @@ public class ProductEntity {
 
     public void setReviews(List<ReviewEntity> reviews) {
         this.reviews = reviews; }
+
+    public LocalDate getPromoStart() {
+        return promoStart;
+    }
+
+    public void setPromoStart(LocalDate promoStart) {
+        this.promoStart = promoStart;
+    }
+
+    public LocalDate getPromoEnd() {
+        return promoEnd;
+    }
+
+    public void setPromoEnd(LocalDate promoEnd) {
+        this.promoEnd = promoEnd;
+    }
 }
