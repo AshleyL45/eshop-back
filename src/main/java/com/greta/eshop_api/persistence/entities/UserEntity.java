@@ -36,8 +36,9 @@ public class UserEntity implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return Collections.singletonList(() -> "ROLE_" + role.name());
+        return Collections.singletonList(new org.springframework.security.core.authority.SimpleGrantedAuthority(role.name()));
     }
+
 
     @Override
     public String getUsername() {

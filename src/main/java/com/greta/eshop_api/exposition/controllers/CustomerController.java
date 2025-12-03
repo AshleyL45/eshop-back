@@ -4,10 +4,12 @@ import com.greta.eshop_api.domain.services.CustomerService;
 import com.greta.eshop_api.exposition.dtos.ApiResponse;
 import com.greta.eshop_api.exposition.dtos.Customer.CustomerRequestDTO;
 import com.greta.eshop_api.exposition.dtos.Customer.CustomerResponseDTO;
+import com.greta.eshop_api.persistence.entities.UserEntity;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -103,4 +105,22 @@ public class CustomerController {
                 )
         );
     }
+
+    @GetMapping("/me")
+    public ResponseEntity<ApiResponse<CustomerResponseDTO>> getMyProfile(
+            @AuthenticationPrincipal UserEntity user,
+            HttpServletRequest http
+    ) {
+        CustomerResponseDTO dto = service.getByUserId(user.getId());
+
+        return ResponseEntity.ok(
+                new ApiResponse<>(
+                        200,
+                        "Profil récupéré",
+                        http.getRequestURI(),
+                        dto
+                )
+        );
+    }
+
 }

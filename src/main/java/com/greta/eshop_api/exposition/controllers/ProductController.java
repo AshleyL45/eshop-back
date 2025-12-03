@@ -106,7 +106,7 @@ public class ProductController {
         );
     }
 
-    @DeleteMapping("/{id']")
+    @DeleteMapping("/{id}")
     public ResponseEntity<ApiResponse<Void>> deleteProduct(
             @PathVariable Long id,
             HttpServletRequest request

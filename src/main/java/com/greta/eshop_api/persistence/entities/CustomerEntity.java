@@ -22,7 +22,7 @@ public class CustomerEntity {
     private List<OrderEntity> orders;
 
     @OneToOne
-    @JoinColumn(name = "user_id", nullable = false, unique = true)
+    @JoinColumn(name = "user_id", unique = true)
     private UserEntity user;
 
 
