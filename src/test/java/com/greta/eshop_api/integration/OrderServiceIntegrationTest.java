@@ -18,7 +18,7 @@ import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
-@ActiveProfiles("integration") // Utilise H2
+@ActiveProfiles("integration")
 class OrderServiceIntegrationTest {
 
     @Autowired private OrderService orderService;
@@ -62,23 +62,19 @@ class OrderServiceIntegrationTest {
         product.setStockQuantity(50);
         product.setRating(4.5);
 
-// Obligatoire car NOT NULL
         product.setExpertAdvice("Basic care instructions");
         product.setActive(true);
         product.setDiscount(0.0);
 
-// Promo dates (pas not null, mais cohérentes)
         product.setPromoStart(LocalDate.now());
         product.setPromoEnd(LocalDate.now().plusDays(30));
 
-// Relation obligatoire care_info_id
         CareInfoEntity care = new CareInfoEntity();
         care.setWatering("moderate");
         care.setSunlight("bright indirect light");
         care.setSoilType("well-drained");
         care.setFertilizer("monthly");
 
-// Relation obligatoire botanical_info_id
         BotanicalInfoEntity bio = new BotanicalInfoEntity();
         bio.setFamily("Asphodelaceae");
         bio.setOrigin("North Africa");
@@ -86,11 +82,9 @@ class OrderServiceIntegrationTest {
         bio.setToxicity("non-toxic");
         bio.setDifficulty("easy");
 
-// On attache les objets obligatoires
         product.setCareInfo(care);
         product.setBotanicalInfo(bio);
 
-// ⚠️ Ne surtout pas toucher à createdAt / updatedAt : PrePersist les gère.
         product = productRepository.save(product);
 
 
