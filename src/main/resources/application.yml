@@ -3,39 +3,33 @@ spring:
     name: eshop_api
 
   profiles:
-    active: development
+    active:
+      - development
 
   config:
     import:
       - "configtree:./"
 
-jpa:
-  hibernate:
-    ddl-auto: update
-  show-sql: true
-  properties:
+  jpa:
+    show-sql: true
     hibernate:
-      format_sql: true
-  defer-datasource-initialization: true
+      ddl-auto: create-drop
+    properties:
+      hibernate:
+        format_sql: true
+    defer-datasource-initialization: true
 
-sql:
-  init:
-    mode: never
+  sql:
+    init:
+      mode: always
 
-mvc:
-  throw-exception-if-no-handler-found: true
+  mvc:
+    throw-exception-if-no-handler-found: true
 
-web:
-  resources:
-    add-mappings: false
-
-cors:
-  allowedOrigins: ${CLIENT_URL_DEV}
+  web:
+    resources:
+      add-mappings: false
 
 jwt:
   secret: ${JWT_SECRET}
   expiration: ${JWT_EXPIRATION_MS}
-
-logging:
-  level:
-    org.springframework.web: debug
