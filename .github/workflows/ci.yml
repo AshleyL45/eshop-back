@@ -17,6 +17,11 @@ jobs:
   unit-tests:
     name: 🧪 Unit Tests
     runs-on: ubuntu-latest
+
+    env:
+      JWT_SECRET: ${{ secrets.JWT_SECRET }}
+      JWT_EXPIRATION_MS: ${{ secrets.JWT_EXPIRATION }}
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -43,16 +48,9 @@ jobs:
     name: 🔗 Integration Tests
     runs-on: ubuntu-latest
 
-    # 🔥 VARIABLES D'ENVIRONNEMENT OBLIGATOIRES POUR SPRING
     env:
-      DB_HOST_DEV: ${{ secrets.DB_HOST_DEV }}
-      DB_PORT_DEV: ${{ secrets.DB_PORT_DEV }}
-      DB_NAME_DEV: ${{ secrets.DB_NAME_DEV }}
-      DB_USER_DEV: ${{ secrets.DB_USER_DEV }}
-      DB_PASSWORD_DEV: ${{ secrets.DB_PASSWORD_DEV }}
-      CLIENT_URL_DEV: ${{ secrets.CLIENT_URL_DEV }}
-      jwt.secret: ${{ secrets.JWT_SECRET }}
-      jwt.expiration: ${{ secrets.JWT_EXPIRATION }}
+      JWT_SECRET: ${{ secrets.JWT_SECRET }}
+      JWT_EXPIRATION_MS: ${{ secrets.JWT_EXPIRATION }}
 
     steps:
       - name: Checkout code
@@ -63,6 +61,9 @@ jobs:
         with:
           distribution: 'temurin'
           java-version: '21'
+
+      - name: Start Docker
+        run: sudo service docker start
 
       - name: Cache Maven dependencies
         uses: actions/cache@v3
@@ -76,20 +77,16 @@ jobs:
         run: mvn test -Pintegration-tests
 
 
+
   e2e-tests:
     name: 🚀 E2E Tests
     runs-on: ubuntu-latest
-    if: github.event_name == 'pull_request' && ((github.base_ref == 'staging' && github.head_ref == 'development') || (github.base_ref == 'production' && github.head_ref == 'staging'))
 
     env:
-      DB_HOST_DEV: ${{ secrets.DB_HOST_DEV }}
-      DB_PORT_DEV: ${{ secrets.DB_PORT_DEV }}
-      DB_NAME_DEV: ${{ secrets.DB_NAME_DEV }}
-      DB_USER_DEV: ${{ secrets.DB_USER_DEV }}
-      DB_PASSWORD_DEV: ${{ secrets.DB_PASSWORD_DEV }}
-      CLIENT_URL_DEV: ${{ secrets.CLIENT_URL_DEV }}
-      jwt.secret: ${{ secrets.JWT_SECRET }}
-      jwt.expiration: ${{ secrets.JWT_EXPIRATION }}
+      JWT_SECRET: ${{ secrets.JWT_SECRET }}
+      JWT_EXPIRATION_MS: ${{ secrets.JWT_EXPIRATION }}
+
+    if: github.event_name == 'pull_request' && ((github.base_ref == 'staging' && github.head_ref == 'development') || (github.base_ref == 'production' && github.head_ref == 'staging'))
 
     steps:
       - name: Checkout code
