@@ -2,10 +2,10 @@ package com.greta.eshop_api.persistence.entities;
 
 import jakarta.persistence.*;
 
-import java.util.List;
-
-
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "product")
@@ -33,55 +33,62 @@ public class ProductEntity {
     @Column(nullable = false)
     private String imageUrl;
 
-    @Column(nullable = false)
-    private String category;
+    @ManyToOne
+    @JoinColumn(name = "category_id")
+    private CategoryEntity category;
 
     @Column(nullable = false)
-    private Boolean inStock;
+    private int stockQuantity;
 
     @Column(nullable = false)
     private double rating;
 
-    @Column(nullable = false)
-    private String watering;
+    @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @JoinColumn(name = "care_info_id", nullable = false)
+    private CareInfoEntity careInfo;
 
-    @Column(nullable = false)
-    private String sunlight;
+    @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @JoinColumn(name = "botanical_info_id", nullable = false)
+    private BotanicalInfoEntity botanicalInfo;
 
-    @Column(nullable = false)
-    private String fertilizer;
 
-    @Column(nullable = false)
-    private String soilType;
-
-    @ElementCollection /* table séparée */
-    @CollectionTable(name = "product_size_options", joinColumns = @JoinColumn(name = "product_id")) /* configuration table + colonne jointure */
+    @ElementCollection
+    @CollectionTable(name = "product_size_options", joinColumns = @JoinColumn(name = "product_id"))
     @Column(name = "size_option")
     private List<String> sizeOptions;
 
-    @Column(nullable = false)
-    private String family;
-
-    @Column(nullable = false)
-    private String origin;
-
-    @Column(nullable = false)
-    private String lifespan;
-
-    @Column(nullable = false)
-    private String toxicity;
-
-    @Column(nullable = false)
-    private String difficulty;
-
     @Column(nullable = false, columnDefinition = "TEXT")
     private String expertAdvice;
+
+    @Column(nullable = false)
+    private boolean active = true;
+
+    @Column(nullable = false)
+    private double discount = 0.0;
 
     @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
     @Column(nullable = false)
     private LocalDateTime updatedAt;
+
+    @Column
+    private LocalDate promoStart;
+
+    @Column
+    private LocalDate promoEnd;
+
+    @OneToMany(mappedBy = "product")
+    private List<OrderItemEntity> orderItems;
+
+    @OneToMany(mappedBy = "product")
+    private List<CartItemEntity> cartItems;
+
+    @OneToMany(mappedBy = "product")
+    private List<FavoriteEntity> favorites;
+
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<ReviewEntity> reviews = new ArrayList<>();
 
     @PrePersist
     public void onCreate() {
@@ -94,190 +101,153 @@ public class ProductEntity {
         updatedAt = LocalDateTime.now();
     }
 
-    public ProductEntity() {
-    }
+    public ProductEntity() {}
 
     public Long getId() {
-        return id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public String getScientificName() {
-        return scientificName;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public String getLongDescription() {
-        return longDescription;
-    }
-
-    public double getPrice() {
-        return price;
-    }
-
-    public String getImageUrl() {
-        return imageUrl;
-    }
-
-    public String getCategory() {
-        return category;
-    }
-
-    public Boolean getInStock() {
-        return inStock;
-    }
-
-    public double getRating() {
-        return rating;
-    }
-
-    public String getWatering() {
-        return watering;
-    }
-
-    public String getSunlight() {
-        return sunlight;
-    }
-
-    public String getFertilizer() {
-        return fertilizer;
-    }
-
-    public String getSoilType() {
-        return soilType;
-    }
-
-    public List<String> getSizeOptions() {
-        return sizeOptions;
-    }
-
-    public String getFamily() {
-        return family;
-    }
-
-    public String getOrigin() {
-        return origin;
-    }
-
-    public String getLifespan() {
-        return lifespan;
-    }
-
-    public String getToxicity() {
-        return toxicity;
-    }
-
-    public String getDifficulty() {
-        return difficulty;
-    }
-
-    public String getExpertAdvice() {
-        return expertAdvice;
-    }
-
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
-
-    public LocalDateTime getUpdatedAt() {
-        return updatedAt;
-    }
+        return id; }
 
     public void setId(Long id) {
-        this.id = id;
-    }
+        this.id = id; }
+
+    public String getName() {
+        return name; }
 
     public void setName(String name) {
-        this.name = name;
-    }
+        this.name = name; }
+
+    public String getScientificName() {
+        return scientificName; }
 
     public void setScientificName(String scientificName) {
-        this.scientificName = scientificName;
-    }
+        this.scientificName = scientificName; }
+
+    public String getDescription() {
+        return description; }
 
     public void setDescription(String description) {
-        this.description = description;
-    }
+        this.description = description; }
+
+    public String getLongDescription() {
+        return longDescription; }
 
     public void setLongDescription(String longDescription) {
-        this.longDescription = longDescription;
-    }
+        this.longDescription = longDescription; }
+
+    public double getPrice() {
+        return price; }
 
     public void setPrice(double price) {
-        this.price = price;
-    }
+        this.price = price; }
+
+    public String getImageUrl() {
+        return imageUrl; }
 
     public void setImageUrl(String imageUrl) {
-        this.imageUrl = imageUrl;
-    }
+        this.imageUrl = imageUrl; }
 
-    public void setCategory(String category) {
-        this.category = category;
-    }
+    public CategoryEntity getCategory() {
+        return category; }
 
-    public void setInStock(Boolean inStock) {
-        this.inStock = inStock;
-    }
+    public void setCategory(CategoryEntity category) {
+        this.category = category; }
+
+    public int getStockQuantity() {
+        return stockQuantity; }
+
+    public void setStockQuantity(int stockQuantity) {
+        this.stockQuantity = stockQuantity; }
+
+    public double getRating() {
+        return rating; }
 
     public void setRating(double rating) {
-        this.rating = rating;
-    }
+        this.rating = rating; }
 
-    public void setWatering(String watering) {
-        this.watering = watering;
-    }
+    public CareInfoEntity getCareInfo() {
+        return careInfo; }
 
-    public void setSunlight(String sunlight) {
-        this.sunlight = sunlight;
-    }
+    public void setCareInfo(CareInfoEntity careInfo) {
+        this.careInfo = careInfo; }
 
-    public void setFertilizer(String fertilizer) {
-        this.fertilizer = fertilizer;
-    }
+    public BotanicalInfoEntity getBotanicalInfo() {
+        return botanicalInfo; }
 
-    public void setSoilType(String soilType) {
-        this.soilType = soilType;
-    }
+    public void setBotanicalInfo(BotanicalInfoEntity botanicalInfo) {
+        this.botanicalInfo = botanicalInfo; }
+
+    public List<String> getSizeOptions() {
+        return sizeOptions; }
 
     public void setSizeOptions(List<String> sizeOptions) {
-        this.sizeOptions = sizeOptions;
-    }
+        this.sizeOptions = sizeOptions; }
 
-    public void setFamily(String family) {
-        this.family = family;
-    }
-
-    public void setOrigin(String origin) {
-        this.origin = origin;
-    }
-
-    public void setLifespan(String lifespan) {
-        this.lifespan = lifespan;
-    }
-
-    public void setToxicity(String toxicity) {
-        this.toxicity = toxicity;
-    }
-
-    public void setDifficulty(String difficulty) {
-        this.difficulty = difficulty;
-    }
+    public String getExpertAdvice() {
+        return expertAdvice; }
 
     public void setExpertAdvice(String expertAdvice) {
-        this.expertAdvice = expertAdvice;
-    }
+        this.expertAdvice = expertAdvice; }
+
+    public boolean isActive() {
+        return active; }
+
+    public void setActive(boolean active) {
+        this.active = active; }
+
+    public double getDiscount() {
+        return discount; }
+
+    public void setDiscount(double discount) {
+        this.discount = discount; }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt; }
 
     public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
-    }
+        this.createdAt = createdAt; }
+
+    public LocalDateTime getUpdatedAt() {
+        return updatedAt; }
 
     public void setUpdatedAt(LocalDateTime updatedAt) {
-        this.updatedAt = updatedAt;
+        this.updatedAt = updatedAt; }
+
+    public List<OrderItemEntity> getOrderItems() {
+        return orderItems; }
+
+    public void setOrderItems(List<OrderItemEntity> orderItems) {
+        this.orderItems = orderItems; }
+
+    public List<CartItemEntity> getCartItems() {
+        return cartItems; }
+
+    public void setCartItems(List<CartItemEntity> cartItems) {
+        this.cartItems = cartItems; }
+
+    public List<FavoriteEntity> getFavorites() {
+        return favorites; }
+
+    public void setFavorites(List<FavoriteEntity> favorites) {
+        this.favorites = favorites; }
+
+    public List<ReviewEntity> getReviews() {
+        return reviews; }
+
+    public void setReviews(List<ReviewEntity> reviews) {
+        this.reviews = reviews; }
+
+    public LocalDate getPromoStart() {
+        return promoStart;
+    }
+
+    public void setPromoStart(LocalDate promoStart) {
+        this.promoStart = promoStart;
+    }
+
+    public LocalDate getPromoEnd() {
+        return promoEnd;
+    }
+
+    public void setPromoEnd(LocalDate promoEnd) {
+        this.promoEnd = promoEnd;
     }
 }
