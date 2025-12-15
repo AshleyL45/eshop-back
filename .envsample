@@ -5,8 +5,8 @@ DB_USER_DEV=
 DB_PASSWORD_DEV=
 CLIENT_URL_DEV=
 
-jwt.secret=
-jwt.expiration=
+JWT_SECRET=
+JWT_EXPIRATION==
 
 
 
