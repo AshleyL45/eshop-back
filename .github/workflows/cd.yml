@@ -57,6 +57,15 @@ jobs:
           mkdir -p ~/.ssh
           echo "${{ secrets.VPS_PRIVATE_KEY_CD_STAGING }}" > ~/.ssh/id_ed25519_staging
           chmod 600 ~/.ssh/id_ed25519_staging
+          
+      - name: Debug SSH connection
+        run: |
+          ssh -vvv \
+          -o StrictHostKeyChecking=no \
+          -i ~/.ssh/id_ed25519_staging \
+          ${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }} \
+          "echo SSH_OK"
+
 
       - name: SSH to VPS and deploy
         run: |
