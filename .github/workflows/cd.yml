@@ -43,7 +43,7 @@ jobs:
           context: .
           file: ./docker/Dockerfile
           push: true
-          tags: ashleylby/spring-app:${{ steps.set_tag.outputs.tag }}
+          tags: ashleylby/e-shop-back:${{ steps.set_tag.outputs.tag }}
 
   deploy:
     name: 🚀 Deploy to VPS
