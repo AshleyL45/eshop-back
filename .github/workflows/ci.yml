@@ -25,22 +25,15 @@ jobs:
       JWT_EXPIRATION_MS: ${{ secrets.JWT_EXPIRATION }}
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-      - name: Set up JDK 21
-        uses: actions/setup-java@v4
+      - uses: actions/setup-java@v4
         with:
           distribution: temurin
           java-version: 21
 
-      - name: Cache Maven dependencies
-        uses: actions/cache@v4
-        with:
-          path: ~/.m2/repository
-          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
-          restore-keys: |
-            ${{ runner.os }}-maven
+      - name: Make mvnw executable
+        run: chmod +x mvnw
 
       - name: Run unit tests
         run: ./mvnw test -Punit-tests
@@ -57,25 +50,18 @@ jobs:
       JWT_EXPIRATION_MS: ${{ secrets.JWT_EXPIRATION }}
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-      - name: Set up JDK 21
-        uses: actions/setup-java@v4
+      - uses: actions/setup-java@v4
         with:
           distribution: temurin
           java-version: 21
 
-      - name: Start Docker (for Testcontainers if needed)
+      - name: Start Docker
         run: sudo service docker start
 
-      - name: Cache Maven dependencies
-        uses: actions/cache@v4
-        with:
-          path: ~/.m2/repository
-          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
-          restore-keys: |
-            ${{ runner.os }}-maven
+      - name: Make mvnw executable
+        run: chmod +x mvnw
 
       - name: Run integration tests
         run: ./mvnw test -Pintegration-tests
@@ -91,22 +77,20 @@ jobs:
       JWT_SECRET: ${{ secrets.JWT_SECRET }}
       JWT_EXPIRATION_MS: ${{ secrets.JWT_EXPIRATION }}
 
-    if: >
-      github.event_name == 'pull_request' &&
-      (
-        (github.base_ref == 'staging' && github.head_ref == 'development') ||
-        (github.base_ref == 'production' && github.head_ref == 'staging')
-      )
+    if: github.event_name == 'pull_request' &&
+      ((github.base_ref == 'staging' && github.head_ref == 'development') ||
+      (github.base_ref == 'production' && github.head_ref == 'staging'))
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-      - name: Set up JDK 21
-        uses: actions/setup-java@v4
+      - uses: actions/setup-java@v4
         with:
           distribution: temurin
           java-version: 21
 
-      - name: Run E2E tests
+      - name: Make mvnw executable
+        run: chmod +x mvnw
+
+      - name: Run e2e tests
         run: ./mvnw test -Pe2e-tests
