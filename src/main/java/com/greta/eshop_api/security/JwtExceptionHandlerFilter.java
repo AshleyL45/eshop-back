@@ -15,30 +15,25 @@ import java.io.IOException;
 public class JwtExceptionHandlerFilter extends OncePerRequestFilter {
 
     @Override
+    protected boolean shouldNotFilter(HttpServletRequest request) {
+        return request.getServletPath().startsWith("/auth/");
+    }
+
+    @Override
     protected void doFilterInternal(HttpServletRequest request,
                                     HttpServletResponse response,
                                     FilterChain filterChain)
             throws ServletException, IOException {
 
         try {
-            // Laisser la requête continuer normalement
             filterChain.doFilter(request, response);
 
         } catch (JwtValidationException e) {
-            handleJwtError(response, HttpStatus.UNAUTHORIZED, e.getMessage());
-
-        } catch (Exception e) {
-            handleJwtError(response, HttpStatus.INTERNAL_SERVER_ERROR,
-                    "Erreur interne d’authentification");
+            // Si jamais une JwtValidationException remonte quand même,
+            // on renvoie 401 proprement.
+            response.setStatus(HttpStatus.UNAUTHORIZED.value());
+            response.setContentType("application/json");
+            response.getWriter().write("{\"error\":\"" + e.getMessage() + "\"}");
         }
-    }
-
-    private void handleJwtError(HttpServletResponse response,
-                                HttpStatus status,
-                                String message) throws IOException {
-
-        response.setStatus(status.value());
-        response.setContentType("application/json");
-        response.getWriter().write("{\"error\": \"" + message + "\"}");
     }
 }
