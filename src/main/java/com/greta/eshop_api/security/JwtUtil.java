@@ -15,10 +15,12 @@ import java.util.Date;
 @Service
 public class JwtUtil {
 
-    @Value("${jwt.secret}")
+    @Value("${JWT_SECRET}")
     private String jwtSecret;
-    @Value("${jwt.expiration}")
-    private int jwtExpirationMs;
+
+    @Value("${JWT_EXPIRATION}")
+    private long jwtExpirationMs;
+
     private SecretKey key;
 
     @PostConstruct
@@ -31,26 +33,26 @@ public class JwtUtil {
                 .setSubject(user.getEmail())
                 .claim("role", user.getRole().name())
                 .setIssuedAt(new Date())
-                .setExpiration(new Date((new Date()).getTime() + jwtExpirationMs))
+                .setExpiration(new Date(System.currentTimeMillis() + jwtExpirationMs))
                 .signWith(key, SignatureAlgorithm.HS256)
                 .compact();
     }
 
     public String getEmailFromToken(String token) {
         return Jwts.parserBuilder()
-                .setSigningKey(key).build()
+                .setSigningKey(key)
+                .build()
                 .parseClaimsJws(token)
                 .getBody()
                 .getSubject();
     }
 
-    public boolean validateJwtToken(String token) {
+    public void validateJwtToken(String token) {
         try {
             Jwts.parserBuilder()
                     .setSigningKey(key)
                     .build()
                     .parseClaimsJws(token);
-            return true;
         } catch (ExpiredJwtException e) {
             throw new JwtValidationException("Token expiré", e);
         } catch (MalformedJwtException e) {
