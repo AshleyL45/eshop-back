@@ -28,7 +28,6 @@ jobs:
           username: ${{ secrets.DOCKER_HUB_USERNAME }}
           password: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
 
-
       - name: Set Docker image tag
         id: set_tag
         run: |
@@ -57,27 +56,26 @@ jobs:
           mkdir -p ~/.ssh
           echo "${{ secrets.VPS_PRIVATE_KEY_CD_STAGING }}" > ~/.ssh/id_ed25519_staging
           chmod 600 ~/.ssh/id_ed25519_staging
-          
+
       - name: Debug SSH connection
         run: |
-          ssh -vvv \
-          -o StrictHostKeyChecking=no \
-          -i ~/.ssh/id_ed25519_staging \
-          ${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }} \
-          "echo SSH_OK"
+          ssh -o StrictHostKeyChecking=no \
+            -i ~/.ssh/id_ed25519_staging \
+            ${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }} \
+            "echo SSH_OK"
 
-
-      - name: SSH to VPS and deploy
+      - name: 🚀 Deploy to VPS
         env:
           VPS_USER: ${{ secrets.VPS_USER }}
           VPS_HOST: ${{ secrets.VPS_HOST }}
         run: |
           TAG=${{ needs.build-and-push.outputs.tag }}
+
           ssh -o StrictHostKeyChecking=no \
             -i ~/.ssh/id_ed25519_staging \
-            $VPS_USER@$VPS_HOST << EOF
-              cd /home/$VPS_USER/eshop/backend/$TAG
-              docker compose pull
-              docker compose down
+            $VPS_USER@$VPS_HOST "
+              cd /home/$VPS_USER/eshop/backend/$TAG &&
+              docker compose pull &&
+              docker compose down &&
               docker compose up -d
-            EOF
+            "
