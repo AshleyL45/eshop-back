@@ -68,10 +68,16 @@ jobs:
 
 
       - name: SSH to VPS and deploy
+        env:
+          VPS_USER: ${{ secrets.VPS_USER }}
+          VPS_HOST: ${{ secrets.VPS_HOST }}
         run: |
           TAG=${{ needs.build-and-push.outputs.tag }}
-          ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_ed25519_staging ${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }} << EOF
-            cd /home/${{ secrets.VPS_USER }}/backend/$TAG
-            docker compose pull
-            docker compose down && docker compose up -d 
-          EOF
+          ssh -o StrictHostKeyChecking=no \
+            -i ~/.ssh/id_ed25519_staging \
+            $VPS_USER@$VPS_HOST << EOF
+              cd /home/$VPS_USER/eshop/backend/$TAG
+              docker compose pull
+              docker compose down
+              docker compose up -d
+            EOF
