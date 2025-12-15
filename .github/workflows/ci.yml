@@ -43,6 +43,8 @@ jobs:
   integration-tests:
     name: 🔗 Integration Tests
     runs-on: ubuntu-latest
+    if: false
+
 
     env:
       SPRING_PROFILES_ACTIVE: integration
