@@ -43,13 +43,14 @@ public class ProductEntity {
     @Column(nullable = false)
     private double rating;
 
-    @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @ManyToOne
     @JoinColumn(name = "care_info_id", nullable = false)
     private CareInfoEntity careInfo;
 
-    @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @ManyToOne
     @JoinColumn(name = "botanical_info_id", nullable = false)
     private BotanicalInfoEntity botanicalInfo;
+
 
 
     @ElementCollection
